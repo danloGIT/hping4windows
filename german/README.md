@@ -1,4 +1,4 @@
-Hier ist eine detaillierte Anleitung, wie du **hping3** nativ unter Windows mit **MinGW** und **WinPcap** (oder Npcap) kompilieren und verwenden kannst.
+Hier ist eine detaillierte Anleitung, wie du **hping3** selbst nativ unter Windows mit **MinGW** und **WinPcap** (oder Npcap) kompilieren und verwenden kannst.
 
 ---
 
