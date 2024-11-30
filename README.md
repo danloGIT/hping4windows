@@ -1,101 +1,101 @@
-Hier ist eine detaillierte Anleitung, wie du **hping3** nativ unter Windows mit **MinGW** und **WinPcap** (oder Npcap) kompilieren und verwenden kannst.
+Here’s a detailed guide on compiling and using **hping3** yourself natively on Windows with **MinGW** and **WinPcap (or Npcap)**, translated from German to English:
 
 ---
 
-### **1. Voraussetzungen**
+### **1. Prerequisites**
 
-1. **MinGW installieren**:
-   - Lade MinGW von [mingw.org](http://www.mingw.org/) herunter.
-   - Wähle während der Installation die benötigten Tools aus, insbesondere:
+1. **Install MinGW**:
+   - Download MinGW from [mingw.org](http://www.mingw.org/).
+   - During installation, select the necessary tools, especially:
      - `gcc`
      - `g++`
      - `make`
-   - Füge den MinGW-Bin-Pfad (z. B. `C:\MinGW\bin`) zur Umgebungsvariable `PATH` hinzu.
+   - Add the MinGW `bin` path (e.g., `C:\MinGW\bin`) to the system environment variable `PATH`.
 
-2. **WinPcap oder Npcap installieren**:
-   - WinPcap (älter, aber oft noch genutzt): [winpcap.org](https://www.winpcap.org/).
-   - Alternativ: Npcap (modern und kompatibel): [Npcap Download](https://nmap.org/npcap/).
-   - Stelle sicher, dass du auch die Entwickler-Bibliotheken installierst.
+2. **Install WinPcap or Npcap**:
+   - WinPcap (older, often still used): [winpcap.org](https://www.winpcap.org/).
+   - Alternatively: Npcap (modern and compatible): [Npcap Download](https://nmap.org/npcap/).
+   - Ensure that the developer libraries are installed.
 
-3. **hping3-Quellcode herunterladen**:
-   - Lade den Quellcode von hping3 von der offiziellen Seite herunter: [hping.org](http://www.hping.org/download.php).
-   - Entpacke den Quellcode in ein Arbeitsverzeichnis, z. B. `C:\hping3`.
+3. **Download hping3 Source Code**:
+   - Obtain the source code for hping3 from its official repository: [hping.org](http://www.hping.org/download.php) (currently offline; you may need to use a mirror or archived version).
+   - Extract the source code to a working directory, e.g., `C:\hping3`.
 
 ---
 
-### **2. Umgebung einrichten**
+### **2. Set Up the Environment**
 
-1. Öffne die Windows-Eingabeaufforderung oder PowerShell und wechsle in das Verzeichnis des hping3-Quellcodes:
+1. Open the Windows Command Prompt or PowerShell and navigate to the hping3 source directory:
    ```cmd
    cd C:\hping3
    ```
 
-2. Stelle sicher, dass MinGW korrekt funktioniert, indem du überprüfst, ob der GCC-Compiler verfügbar ist:
+2. Verify MinGW installation by checking if GCC is accessible:
    ```cmd
    gcc --version
    ```
 
 ---
 
-### **3. Quellcode vorbereiten**
+### **3. Prepare the Source Code**
 
-1. **Header-Dateien anpassen**:
-   - Öffne relevante Quellcode-Dateien (z. B. `hping3.c`) in einem Texteditor.
-   - Ersetze Linux-spezifische Header-Dateien oder Funktionen mit Windows-kompatiblen Alternativen:
-     - `unistd.h` → Ersetze durch `<windows.h>` oder passende Implementationen.
+1. **Modify Header Files**:
+   - Open relevant source files (e.g., `hping3.c`) in a text editor.
+   - Replace Linux-specific headers or functions with Windows-compatible alternatives:
+     - Replace `unistd.h` with `<windows.h>` or implement appropriate replacements.
 
-2. **Makefile anpassen**:
-   - Öffne die Datei `Makefile` und bearbeite die Compiler-Optionen:
-     - Ändere den Compiler zu `gcc` von MinGW:
+2. **Adjust the Makefile**:
+   - Open the `Makefile` and update the compiler settings:
+     - Change the compiler to MinGW’s GCC:
        ```makefile
        CC = gcc
        ```
-     - Füge die WinPcap-Bibliotheken hinzu:
+     - Link the WinPcap libraries:
        ```makefile
        LIBS += -lwpcap -lpacket -lws2_32
        ```
-   - Speichere die Änderungen.
+   - Save the changes.
 
 ---
 
-### **4. Kompilieren**
+### **4. Compile**
 
-1. Führe die Konfiguration aus:
+1. Run the configuration script:
    ```bash
    ./configure
    ```
-   Falls diese nicht funktioniert, überspringe diesen Schritt und passe das Makefile manuell an.
+   If this step fails, skip it and manually adjust the `Makefile` as described above.
 
-2. Starte den Kompiliervorgang:
+2. Start the build process:
    ```bash
    make
    ```
-3. Nach erfolgreicher Kompilierung sollte eine ausführbare Datei `hping3.exe` im Verzeichnis erscheinen.
+3. After successful compilation, the `hping3.exe` executable should appear in the working directory.
 
 ---
 
-### **5. hping3 testen**
+### **5. Test hping3**
 
-1. Navigiere in das Verzeichnis mit der `hping3.exe`.
-2. Starte hping3 mit Administratorrechten, da Raw-Sockets verwendet werden:
+1. Navigate to the directory containing `hping3.exe`.
+2. Run hping3 with administrator privileges to enable raw socket operations:
    ```cmd
    hping3.exe -S -p 80 192.168.1.1
    ```
-   - `-S`: Sendet SYN-Pakete.
-   - `-p 80`: Zielport 80 (HTTP).
-   - `192.168.1.1`: Beispielziel-IP-Adresse.
+   - `-S`: Sends SYN packets.
+   - `-p 80`: Targets port 80 (HTTP).
+   - `192.168.1.1`: Example target IP address.
 
 ---
 
-### **6. Fehlerbehebung**
+### **6. Troubleshooting**
 
-- **Kompilierungsfehler**:
-  - Stelle sicher, dass alle Bibliotheken korrekt verlinkt sind.
-  - Überprüfe die Ausgabe des Kompilers, um fehlende Header-Dateien oder Funktionen zu identifizieren.
+- **Compilation Errors**:
+  - Ensure all libraries are correctly linked.
+  - Debug based on the compiler's output to address missing headers or functions.
 
-- **WinPcap/Npcap-Probleme**:
-  - Wenn die Bibliotheken nicht gefunden werden, überprüfe ihre Installationspfade und füge sie ggf. zur Umgebungsvariable `LIB` hinzu.
+- **WinPcap/Npcap Issues**:
+  - If the libraries are not found, verify their installation paths and add them to the system environment variable `LIB`.
 
 ---
 
-Mit dieser Anleitung kannst du **hping3** erfolgreich nativ unter Windows verwenden.
+With this guide, you should be able to successfully compile and use **hping3** natively on Windows. If hping3’s official resources remain unavailable, you may need to explore alternative tools or archived versions.
